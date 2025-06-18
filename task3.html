@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Game</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #00bcd4, #4caf50);
+    margin: 0;
+    padding: 20px;
+    color: #fff;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    text-align: center;
+    color: #ffeb3b;
+    margin-bottom: 10px;
+  }
+
+  .question {
+    margin: 20px 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .question p {
+    font-size: 1.1rem;
+  }
+
+  .answers {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .answers li {
+    margin: 8px 0;
+  }
+
+  .answers label {
+    display: block;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .answers input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  .answers label:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  button {
+    display: inline-block;
+    margin: 10px 5px 0 5px;
+    background: #ff5722;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #e64a19;
+  }
+
+  .result {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ffc107;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎉  Quiz Game 🎉</h1>
+  <div id="quiz"></div>
+  <div class="result" id="result"></div>
+  <button id="submitBtn">Submit</button>
+  <button id="restartBtn">Restart Quiz</button>
+</div>
+
+<script>
+  const quizData = [
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Venus", "Mars", "Jupiter"],
+      answer: "Mars"
+    },
+    {
+      question: "Which language is used to style web pages?",
+      options: ["HTML", "Python", "CSS", "Java"],
+      answer: "CSS"
+    },
+    {
+      question: "What does CPU stand for?",
+      options: ["Central Processing Unit", "Control Processing Unit", "Central Programming Unit", "Computer Personal Unit"],
+      answer: "Central Processing Unit"
+    }
+  ];
+
+  const quizContainer = document.getElementById('quiz');
+  const resultContainer = document.getElementById('result');
+  const submitBtn = document.getElementById('submitBtn');
+  const restartBtn = document.getElementById('restartBtn');
+
+  function loadQuiz() {
+    const output = quizData.map((q, index) => {
+      const answers = q.options.map(option => `
+        <li>
+          <label>
+            <input type="radio" name="question${index}" value="${option}"> ${option}
+          </label>
+        </li>
+      `).join('');
+      return `
+        <div class="question">
+          <p>${index + 1}. ${q.question}</p>
+          <ul class="answers">${answers}</ul>
+        </div>
+      `;
+    }).join('');
+    quizContainer.innerHTML = output;
+    resultContainer.textContent = '';
+  }
+
+  function showResults() {
+    let score = 0;
+    quizData.forEach((q, index) => {
+      const selected = document.querySelector(`input[name=question${index}]:checked`);
+      if (selected && selected.value === q.answer) {
+        score++;
+      }
+    });
+    resultContainer.textContent = `You scored ${score} out of ${quizData.length}`;
+  }
+
+  function restartQuiz() {
+    loadQuiz();
+  }
+
+  loadQuiz();
+
+  submitBtn.addEventListener('click', showResults);
+  restartBtn.addEventListener('click', restartQuiz);
+</script>
+
+</body>
+</html>
